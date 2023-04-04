@@ -102,7 +102,7 @@ public class ConcurrencyExample
     {
         int sum = 0;
         int arraySize = 200000000;
-        int[] array = new int[arraySize];
+        int[] numArray = new int[arraySize];
 
         public void run()
         {
@@ -111,8 +111,8 @@ public class ConcurrencyExample
 
             for (int i = 0; i < arraySize; i++)
             {
-                array[i] = random.nextInt(10) + 1;
-                sum += array[i];
+                numArray[i] = random.nextInt(10) + 1;
+                sum += numArray[i];
             }
             long e = System.nanoTime();
             long nanoSec = e - s;
