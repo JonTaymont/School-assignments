@@ -9,6 +9,20 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Returns a HashMap that contains words from a text file. Controller includes:
+ * <ul>
+ *     <li> A TextArea for displaying the results.
+ *     <li> A Label to guide the user.
+ *     <li> The text file.
+ * </ul>
+ * <p>
+ * This class will read in "theRaven.txt" file and present the top 20 words that occurred.
+ *
+ * @author Jonathan Taymont
+ * @version 3.0
+ */
+
 public class Controller
 {
     @FXML

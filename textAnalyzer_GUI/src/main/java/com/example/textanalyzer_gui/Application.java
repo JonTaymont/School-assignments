@@ -6,6 +6,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.image.Image;
 
+/**
+ * Contains start() and main(). Application includes:
+ * <ul>
+ *     <li> Size of scene.
+ *     <li> Title of GUI.
+ *     <li> Icon for GUI.
+ * </ul>
+ * <p>
+ * This class will make the GUI visible with proper size, title, and icon in start() and will launch the GUI in main().
+ *
+ * @author Jonathan Taymont
+ * @version 3.0
+ */
+
 public class Application extends javafx.application.Application
 {
     @Override
