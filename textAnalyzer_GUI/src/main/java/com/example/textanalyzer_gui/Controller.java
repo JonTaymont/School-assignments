@@ -5,9 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.*;
 
 /**
  * Returns a HashMap that contains words from a text file. Controller includes:
@@ -34,9 +34,17 @@ public class Controller
     @FXML
     protected void textAnalyzeClick()
     {
+        HashMap<String, Integer> wordMap = new HashMap<>();
+
         try
         {
-            HashMap<String, Integer> wordMap = new HashMap<>();
+            Connection connection;
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/text_analyzer","root","cop2805");
+
+            Statement st = connection.createStatement();
+            st.executeUpdate("TRUNCATE TABLE word_occurrences.word ");
 
             BufferedReader br = new BufferedReader(new FileReader("theRaven.txt"));
             String str;
@@ -69,17 +77,31 @@ public class Controller
                 }
             }
 
-            resultsTextID.clear();
+            String s = "INSERT INTO word_occurrences.word (words, occurrences) VALUES (?,?)";
+            PreparedStatement p = connection.prepareStatement(s);
 
+            for(Map.Entry <String, Integer> e : wordMap.entrySet())
+            {
+                p.setString(1, e.getKey());
+                p.setInt(2, e.getValue());
+                p.executeUpdate();
+            }
+
+            resultsTextID.clear();
             displayMessageID.setText("Results are listed above");
 
             // Reverse the order, limit list to 20 values, print only letters and number of occurrences.
-            wordMap.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                    .toList()
-                    .subList(0, 20)
-                    .forEach((k) -> resultsTextID.appendText(k.getKey()
-                            .replaceAll("[^a-z]", "") + ": " + k.getValue() + "\n"));
+            s = "SELECT * FROM word_occurrences.word ORDER BY occurrences DESC LIMIT 20";
+            p = connection.prepareStatement(s);
+
+            ResultSet results = p.executeQuery();
+
+            while (results.next())
+            {
+                resultsTextID.appendText(results.getString(1)
+                        .replaceAll("[^a-z]", "") + ": " + results.getInt(2) + "\n");
+            }
+            p.close();
         }
         catch (Exception e)
         {
